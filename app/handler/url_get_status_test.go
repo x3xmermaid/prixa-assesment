@@ -16,11 +16,11 @@ func TestGetUrlStatus(t *testing.T) {
 		ErrMap:       map[string]bool{},
 	}
 
-	handler := handler.NewHandler(redisdb)
+	handler := handler.NewHandler(redisdb, nil)
 
 	// Setup Routing
 	r := mux.NewRouter()
-	r.HandleFunc("/{url}/status", handler.GetUrl).Methods(http.MethodGet)
+	r.HandleFunc("/{url}/status", handler.GetUrlStatus).Methods(http.MethodGet)
 
 	// Create httptest Server
 	httpServer := setup(r)

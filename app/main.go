@@ -23,7 +23,7 @@ const (
 type Handler interface {
 	GetUrl(w http.ResponseWriter, r *http.Request)
 	ShortenUrl(w http.ResponseWriter, r *http.Request)
-	GetShortUrlStatus(w http.ResponseWriter, r *http.Request)
+	// GetShortUrlStatus(w http.ResponseWriter, r *http.Request)
 }
 
 // NewRouter returns router.
@@ -32,8 +32,8 @@ func NewRouter(handler Handler) *mux.Router {
 
 	// Linux Server Inventory
 	r.HandleFunc("/{url}", handler.GetUrl).Methods(http.MethodGet)
-	r.HandleFunc("/{url}/status", handler.GetShortUrlStatus).Methods(http.MethodGet)
-	r.HandleFunc("/short-link", handler.ShortenUrl).Methods(http.MethodPost)
+	// r.HandleFunc("/{url}/status", handler.GetShortUrlStatus).Methods(http.MethodGet)
+	r.HandleFunc("/short-url", handler.ShortenUrl).Methods(http.MethodPost)
 
 	return r
 }
@@ -78,7 +78,7 @@ func main() {
 	logrus.Printf("Redis Connection Test: PASS")
 
 	// initialize handler
-	handler := handler.NewHandler(redis)
+	handler := handler.NewHandler(redis, config)
 	r := NewRouter(handler)
 
 	// Run Web Server

@@ -26,3 +26,18 @@ func setup(r *mux.Router) *httptest.Server {
 	server := httptest.NewServer(r)
 	return server
 }
+
+func (m *MockedRedisDB) Put(key string, value interface{}) error {
+	if m.ErrMap["Put"] {
+		return m.ErrStatement
+	}
+	return nil
+}
+
+func (m *MockedRedisDB) GetValue(key string) ([]byte, error) {
+	return []byte{}, nil
+}
+
+func (m *MockedRedisDB) IsAvailable(key string) bool {
+	return true
+}

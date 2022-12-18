@@ -16,7 +16,7 @@ func TestGetUrl(t *testing.T) {
 		ErrMap:       map[string]bool{},
 	}
 
-	handler := handler.NewHandler(redisdb)
+	handler := handler.NewHandler(redisdb, nil)
 
 	// Setup Routing
 	r := mux.NewRouter()

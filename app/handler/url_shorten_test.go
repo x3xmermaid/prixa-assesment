@@ -17,11 +17,11 @@ func TestShortenUrl(t *testing.T) {
 		ErrMap:       map[string]bool{},
 	}
 
-	handler := handler.NewHandler(redisdb)
+	handler := handler.NewHandler(redisdb, nil)
 
 	// Setup Routing
 	r := mux.NewRouter()
-	r.HandleFunc("/short-link", handler.ShortenUrl).Methods(http.MethodPost)
+	r.HandleFunc("/short-url", handler.ShortenUrl).Methods(http.MethodPost)
 
 	// Create httptest Server
 	httpServer := setup(r)
@@ -29,7 +29,7 @@ func TestShortenUrl(t *testing.T) {
 	serverURL, _ := url.Parse(httpServer.URL)
 
 	// 	// Hit API Endpoint
-	targetPath := fmt.Sprintf("%v%v", serverURL, "/short-link")
+	targetPath := fmt.Sprintf("%v%v", serverURL, "/short-url")
 
 	// Insert OK
 	t.Run("ShortenUrl OK", func(t *testing.T) {

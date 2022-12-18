@@ -1,0 +1,12 @@
+# Services Configuration
+service_data:
+  address: :8000
+  localdomain: localhost
+
+source_data:
+  redis_network: tcp
+  redis_address: localhost:6379
+  redis_password: nmpass247
+  redis_timeout: 10
+  redis_key_expire_duration: 900
+  cache_duration: 300
