@@ -6,6 +6,7 @@ require (
 	github.com/gomodule/redigo v1.8.9
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
+	github.com/rafaeljusto/redigomock v2.4.0+incompatible
 	github.com/sirupsen/logrus v1.9.0
 	github.com/thedevsaddam/govalidator v1.9.10
 	gopkg.in/yaml.v2 v2.4.0

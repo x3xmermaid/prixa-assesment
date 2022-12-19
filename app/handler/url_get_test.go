@@ -30,7 +30,6 @@ func TestGetUrl(t *testing.T) {
 	// 	// Hit API Endpoint
 	targetPath := fmt.Sprintf("%v%v", serverURL, "/h36bKa")
 
-	// Insert OK
 	t.Run("GetUrl OK", func(t *testing.T) {
 		req, _ := http.NewRequest(http.MethodGet, targetPath, nil)
 		resp, err := http.DefaultClient.Do(req)
@@ -44,4 +43,50 @@ func TestGetUrl(t *testing.T) {
 
 		resp.Body.Close()
 	})
+
+	t.Run("GetUrl Redis Put Error", func(t *testing.T) {
+		redisdb.ErrMap["Put"] = true
+		req, _ := http.NewRequest(http.MethodGet, targetPath, nil)
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatalf("Unable to get worker status: %v", err)
+		}
+
+		if resp.StatusCode != http.StatusInternalServerError {
+			t.Fatalf("Response code should be %v, but have %v", http.StatusInternalServerError, resp.StatusCode)
+		}
+
+		resp.Body.Close()
+	})
+
+	t.Run("GetUrl Redis GetValue-ErrorValue Error", func(t *testing.T) {
+		redisdb.ErrMap["GetValue-ErrorValue"] = true
+		req, _ := http.NewRequest(http.MethodGet, targetPath, nil)
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatalf("Unable to get worker status: %v", err)
+		}
+
+		if resp.StatusCode != http.StatusInternalServerError {
+			t.Fatalf("Response code should be %v, but have %v", http.StatusInternalServerError, resp.StatusCode)
+		}
+
+		resp.Body.Close()
+	})
+
+	t.Run("GetUrl Redis GetValue Error", func(t *testing.T) {
+		redisdb.ErrMap["GetValue"] = true
+		req, _ := http.NewRequest(http.MethodGet, targetPath, nil)
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatalf("Unable to get worker status: %v", err)
+		}
+
+		if resp.StatusCode != http.StatusInternalServerError {
+			t.Fatalf("Response code should be %v, but have %v", http.StatusInternalServerError, resp.StatusCode)
+		}
+
+		resp.Body.Close()
+	})
+
 }

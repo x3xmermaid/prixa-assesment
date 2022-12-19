@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	statusSuccess           = "success"
-	statusFail              = "fail"
-	statusError             = "error"
-	msgInvalidRequestFormat = "Invalid Request Body Format"
+	statusSuccess          = "success"
+	statusFail             = "fail"
+	statusError            = "error"
+	msgInternalServerError = "Internal Server Error"
 )
 
 // Handler holds the API endpoint's function handler.

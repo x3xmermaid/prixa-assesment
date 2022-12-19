@@ -15,7 +15,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// ShortenUrl is method for short url
+// ShortenUrl is method for create short url
 func (h *Handler) ShortenUrl(w http.ResponseWriter, r *http.Request) {
 	rf := &rf.ResponseFormat{}
 
@@ -41,16 +41,27 @@ func (h *Handler) ShortenUrl(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uniqueID := generateID(data.URL)
-	isAvailable := h.redisdb.IsAvailable(uniqueID)
-	if !isAvailable {
-		data.ShortUrl = fmt.Sprintf("%v%v/%v", h.config.ServiceData.LocalDomain, h.config.ServiceData.Address, uniqueID)
-		err := h.redisdb.Put(uniqueID, data)
-		if err != nil {
-			logrus.Errorf("redis put : %v", err)
-			rf.ResponseNOK(http.StatusInternalServerError, statusError, err, w)
-			return
+	isKeyUsed := true
+	repeat := 0
+	for isKeyUsed {
+
+		uniqueID := generateID(data.URL)
+		isKeyUsed := h.redisdb.IsAvailable(uniqueID)
+
+		if !isKeyUsed {
+			data.ShortUrl = fmt.Sprintf("%v%v/%v", h.config.ServiceData.LocalDomain, h.config.ServiceData.Address, uniqueID)
+			err := h.redisdb.Put(uniqueID, data)
+			if err != nil {
+				logrus.Errorf("redis put : %v", err)
+				rf.ResponseNOK(http.StatusInternalServerError, statusError, msgInternalServerError, w)
+				return
+			}
 		}
+
+		if repeat == 3 {
+			break
+		}
+		repeat++
 	}
 
 	rf.ResponseOK(http.StatusCreated, statusSuccess, data, w)

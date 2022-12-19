@@ -14,7 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// GetUrl is method for update movie
+// GetUrl is method for get url
 func (h *Handler) GetUrl(w http.ResponseWriter, r *http.Request) {
 	rf := &rf.ResponseFormat{}
 	vars := mux.Vars(r)
@@ -23,7 +23,7 @@ func (h *Handler) GetUrl(w http.ResponseWriter, r *http.Request) {
 	data, err := h.redisdb.GetValue(uniqueID)
 	if err != nil {
 		logrus.Errorf("redis GetValue : %v", err)
-		rf.ResponseNOK(http.StatusInternalServerError, statusError, err, w)
+		rf.ResponseNOK(http.StatusInternalServerError, statusError, msgInternalServerError, w)
 		return
 	}
 
@@ -31,7 +31,7 @@ func (h *Handler) GetUrl(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(data, &result)
 	if err != nil {
 		logrus.Errorf("unmarshall : %v", err)
-		rf.ResponseNOK(http.StatusInternalServerError, statusError, err, w)
+		rf.ResponseNOK(http.StatusInternalServerError, statusError, msgInternalServerError, w)
 		return
 	}
 
@@ -42,7 +42,7 @@ func (h *Handler) GetUrl(w http.ResponseWriter, r *http.Request) {
 	err = h.redisdb.Put(uniqueID, result)
 	if err != nil {
 		logrus.Errorf("redis Put : %v", err)
-		rf.ResponseNOK(http.StatusInternalServerError, statusError, err, w)
+		rf.ResponseNOK(http.StatusInternalServerError, statusError, msgInternalServerError, w)
 		return
 	}
 

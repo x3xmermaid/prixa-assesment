@@ -23,7 +23,7 @@ const (
 type Handler interface {
 	GetUrl(w http.ResponseWriter, r *http.Request)
 	ShortenUrl(w http.ResponseWriter, r *http.Request)
-	// GetShortUrlStatus(w http.ResponseWriter, r *http.Request)
+	GetShortUrlStatus(w http.ResponseWriter, r *http.Request)
 }
 
 // NewRouter returns router.
@@ -32,7 +32,7 @@ func NewRouter(handler Handler) *mux.Router {
 
 	// Linux Server Inventory
 	r.HandleFunc("/{url}", handler.GetUrl).Methods(http.MethodGet)
-	// r.HandleFunc("/{url}/status", handler.GetShortUrlStatus).Methods(http.MethodGet)
+	r.HandleFunc("/{url}/status", handler.GetShortUrlStatus).Methods(http.MethodGet)
 	r.HandleFunc("/short-url", handler.ShortenUrl).Methods(http.MethodPost)
 
 	return r

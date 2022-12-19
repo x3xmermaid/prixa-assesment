@@ -35,9 +35,21 @@ func (m *MockedRedisDB) Put(key string, value interface{}) error {
 }
 
 func (m *MockedRedisDB) GetValue(key string) ([]byte, error) {
-	return []byte{}, nil
+	if m.ErrMap["GetValue"] {
+		return []byte{}, m.ErrStatement
+	}
+
+	if m.ErrMap["GetValue-ErrorValue"] {
+		return []byte(`{error}`), nil
+	}
+
+	return []byte(`{"url":"www.try.com/satria/amanattullah"}`), nil
 }
 
 func (m *MockedRedisDB) IsAvailable(key string) bool {
+	if m.ErrMap["IsAvailable"] {
+		return false
+	}
+
 	return true
 }

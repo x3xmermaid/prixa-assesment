@@ -1,0 +1,14 @@
+FROM alpine
+
+# Working Directory
+WORKDIR /home/prixa
+
+# Copy in the source
+COPY prixa ./prixa
+
+# Make shell scripts executable
+RUN chmod +x ./prixa
+RUN apk add --no-cache tzdata
+
+# Running
+CMD ["./prixa"]
