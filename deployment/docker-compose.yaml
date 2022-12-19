@@ -1,0 +1,43 @@
+version: "2.2"
+networks:
+  prixa:
+    external: true
+
+volumes:
+  redisdb_vol:
+
+
+services:
+  db-redis:
+    image: redis:6.0-alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      prixa:
+        aliases:
+          - redisdb
+    ports:
+      - "6379:6379"
+    volumes:
+      - "redisdb_vol:/data"
+      - "${PWD}/db-redis/redis.conf:/usr/local/etc/redis/redis.conf"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  service-prixa:
+    image: x3xmermaid/prixa:latest
+    networks:
+      prixa:
+        aliases:
+          - service-prixa
+    ports:
+      - "8000:8000"
+    volumes:
+      - ${PWD}/conf/config.yaml:/home/prixa/conf/config.yaml
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
